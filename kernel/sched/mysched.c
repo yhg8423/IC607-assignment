@@ -106,7 +106,7 @@ static void switched_to_mysched(struct rq *rq, struct task_struct *p)
     resched_curr(rq);
 }
 
-static const struct sched_class mysched_sched_class = {
+const struct sched_class mysched_sched_class = {
     //pointer to next scheduling class in hierarchy
     .next = &fair_sched_class,
 
