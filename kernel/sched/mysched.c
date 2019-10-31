@@ -3,7 +3,6 @@
 */
 #include "sched.h"
 #include <linux/list.h>
-#include <stdlib.h>
 
 void init_mysched_rq(struct mysched_rq *mysched_rq)
 {
