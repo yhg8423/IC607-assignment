@@ -94,7 +94,7 @@ static void task_tick_mysched(struct rq *rq, struct task_struct *p, int queued)
     //need to insert
     struct sched_mysched_entity *me = &p->mysched;
     //printk(KERN_INFO "***[OS18] Tick:::P[%u](mysched = %u): pass = %llu \n", p->pid, me->stride, me->pass);
-    printk(KERN_INFO "***[OS18] Tick:::P[%u](mysched = %u) \n", p->pid, &p->mysched.mysched);
+    printk(KERN_INFO "***[OS18] Tick:::P[%u](mysched_ticket = %u) \n", p->pid, me->ticket);
 }
 
 static void prio_changed_mysched(struct rq *rq, struct task_struct *p, int oldprio)
