@@ -20,8 +20,8 @@ static void enqueue_task_mysched(struct rq *rq, struct task_struct *p, int flags
 {
     list_add_tail(&rq->mysched.queue, &p->mysched.run_list);
     rq->mysched.nr_running++;
-    &p->mysched.ticket = 100;
-    rq->mysched.max_ticket += &p->mysched.ticket; 
+    p->mysched.ticket = 100;
+    rq->mysched.max_ticket += p->mysched.ticket; 
     printk(KERN_INFO"***[MYSCHED] Enqueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 }
 
@@ -34,7 +34,7 @@ static void dequeue_task_mysched(struct rq *rq, struct task_struct *p, int flags
 	}
 }
 
-static void yield_task_fair(struct rq *rq)
+static void yield_task_mysched(struct rq *rq)
 {
 }
 
@@ -89,7 +89,7 @@ static void set_curr_task_mysched(struct rq *rq)
 {
 }
 
-static void task_tick_mysched(struct rq *rq, struct task_struct *curr, int queued)
+static void task_tick_mysched(struct rq *rq, struct task_struct *p, int queued)
 {
     //need to insert
     struct sched_mysched_entity *me = &p->mysched;
