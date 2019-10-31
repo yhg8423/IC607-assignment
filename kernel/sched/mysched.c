@@ -57,7 +57,8 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 		return NULL;
 
     int total_ticket = 0;
-    int lucky_ticket = (rand() % rq->mysched.max_ticket) + 1;
+    //int lucky_ticket = (rand() % rq->mysched.max_ticket) + 1;
+    int lucky_ticket = 101;
 
     printk(KERN_INFO "***[MYSCHED] total = [%d]\n", rq->mysched.max_ticket);
     printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
