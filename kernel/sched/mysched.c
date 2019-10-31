@@ -34,6 +34,10 @@ static void dequeue_task_mysched(struct rq *rq, struct task_struct *p, int flags
 	}
 }
 
+static void yield_task_fair(struct rq *rq)
+{
+}
+
 static void check_preempt_curr_mysched(struct rq *rq, struct task_struct *p, int flags)
 {
     resched_curr(rq);
@@ -81,6 +85,10 @@ static int select_task_rq_mysched(struct task_struct *p, int cpu, int sd_flag, i
 {
 }
 
+static void set_curr_task_mysched(struct rq *rq)
+{
+}
+
 static void task_tick_mysched(struct rq *rq, struct task_struct *curr, int queued)
 {
     //need to insert
@@ -104,21 +112,21 @@ static const struct sched_class mysched_sched_class = {
 
     //when task enters runnable state
     //nr_running++
-    .enqueue_task = enqueue_task_lottery,
+    .enqueue_task = enqueue_task_mysched,
     //when task needs to go to wait state
     //nr_running--
-    .dequeue_task = dequeue_task_lottery,
-    .yield_task = yield_task_lottery,
+    .dequeue_task = dequeue_task_mysched,
+    .yield_task = yield_task_mysched,
 
     //check if the task that entered runnable state should prevent current running task
-    .check_preempt_curr = check_preempt_curr_lottery,
+    .check_preempt_curr = check_preempt_curr_mysched,
 
     //choose the next task to run from run queue
-    .pick_next_task = pick_next_task_lottery,
-    .put_prev_task = put_prev_task_lottery,
+    .pick_next_task = pick_next_task_mysched,
+    .put_prev_task = put_prev_task_mysched,
 
-    .set_curr_task = set_curr_task_lottery,
-    .task_tick = task_tick_lottery,
+    .set_curr_task = set_curr_task_mysched,
+    .task_tick = task_tick_mysched,
 
 };
 
