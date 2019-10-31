@@ -566,7 +566,7 @@ struct sched_mysched_entity {
 
 	unsigned int on_rq;
 	unsigned int ticket;
-}
+};
 
 union rcu_special {
 	struct {
