@@ -2,7 +2,7 @@
  * Lottery scheduling class for IC 607 assignement
 */
 #include "sched.h"
-#include <list.h>
+#include <linux/list.h>
 #include <stdlib.h>
 
 void init_mysched_rq(struct mysched_rq *mysched_rq)
