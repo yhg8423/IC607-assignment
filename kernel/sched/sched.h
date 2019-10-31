@@ -172,9 +172,16 @@ static inline int dl_policy(int policy)
 {
 	return policy == SCHED_DEADLINE;
 }
+
+static inline int mysched_policy(int policy)
+{
+	return policy == SCHED_MYSCHED;
+}
+
 static inline bool valid_policy(int policy)
 {
-	return idle_policy(policy) || fair_policy(policy) ||
+	return idle_policy(policy) || fair_policy(policy) || 
+		mysched_policy(policy) ||
 		rt_policy(policy) || dl_policy(policy);
 }
 
@@ -331,6 +338,7 @@ extern bool dl_cpu_busy(unsigned int cpu);
 
 struct cfs_rq;
 struct rt_rq;
+struct mysched_rq;
 
 extern struct list_head task_groups;
 
@@ -684,6 +692,15 @@ struct dl_rq {
 	u64			bw_ratio;
 };
 
+struct mysched_rq {
+	unsigned int nr_running;
+	unsigned int max_ticket;
+
+	struct list_head queue;
+
+	unsigned int prev_pick_time;
+};
+
 #ifdef CONFIG_FAIR_GROUP_SCHED
 /* An entity is a task if it doesn't "own" a runqueue */
 #define entity_is_task(se)	(!se->my_q)
@@ -838,6 +855,7 @@ struct rq {
 	struct cfs_rq		cfs;
 	struct rt_rq		rt;
 	struct dl_rq		dl;
+	struct mysched_rq	mysched;
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
 	/* list of leaf cfs_rq on this CPU: */
@@ -1733,6 +1751,7 @@ extern const struct sched_class dl_sched_class;
 extern const struct sched_class rt_sched_class;
 extern const struct sched_class fair_sched_class;
 extern const struct sched_class idle_sched_class;
+extern const struct sched_class mysched_sched_class;
 
 
 #ifdef CONFIG_SMP
@@ -2107,6 +2126,7 @@ print_numa_stats(struct seq_file *m, int node, unsigned long tsf,
 extern void init_cfs_rq(struct cfs_rq *cfs_rq);
 extern void init_rt_rq(struct rt_rq *rt_rq);
 extern void init_dl_rq(struct dl_rq *dl_rq);
+extern void init_mysched_rq(struct mysched_rq *mysched_rq);
 
 extern void cfs_bandwidth_usage_inc(void);
 extern void cfs_bandwidth_usage_dec(void);

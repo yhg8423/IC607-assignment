@@ -560,6 +560,14 @@ struct sched_dl_entity {
 	struct hrtimer inactive_timer;
 };
 
+//define mysched entity structure
+struct sched_mysched_entity {
+	struct list_head run_list;
+
+	unsigned int on_rq;
+	unsigned int ticket;
+}
+
 union rcu_special {
 	struct {
 		u8			blocked;
@@ -639,6 +647,9 @@ struct task_struct {
 	struct task_group		*sched_task_group;
 #endif
 	struct sched_dl_entity		dl; // hw1
+
+	//declare mysched entity into task_struct
+	struct sched_mysched_entity mysched;
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	/* List of struct preempt_notifier: */
