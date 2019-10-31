@@ -48,6 +48,7 @@ static void put_prev_task_mysched(struct rq *rq, struct task_struct *prev)
 static struct task_struct * 
 pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 {
+    printk(KERN_INFO "***[MYSCHED] pick next task cpu=%d\n", cpu_of(rq));
     struct task_struct *next_p = NULL;
 	struct sched_mysched_entity *next_se = NULL;
 	struct mysched_rq *mysched_rq = &rq->mysched;
@@ -58,12 +59,21 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
     int total_ticket = 0;
     int lucky_ticket = (rand() % rq->mysched.max_ticket) + 1;
 
+    printk(KERN_INFO "***[MYSCHED] total = [%d]\n", rq->mysched.max_ticket);
+    printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
+
+
     while(total_ticket > lucky_ticket) {
         next_se = container_of(mysched_rq->queue.next, struct sched_mysched_entity, run_list);
 	    next_p = container_of(next_se, struct task_struct, mysched);
+
+        total_ticket += &next_p->mysched.ticket;
+        printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, &next_p->mysched.ticket);
+        printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
     }
+    printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", next_p->pid);
 	
-	printk(KERN_INFO "\t***[MYSCHED] pick_next_task: cpu=%d,prev->pid=%d,next_p->pid=%d,nr_running=%d\n",cpu_of(rq),prev->pid,next_p->pid,mysched_rq->nr_running);
+	//printk(KERN_INFO "\t***[MYSCHED] pick_next_task: cpu=%d,prev->pid=%d,next_p->pid=%d,nr_running=%d\n",cpu_of(rq),prev->pid,next_p->pid,mysched_rq->nr_running);
 	return next_p;
 }
 
