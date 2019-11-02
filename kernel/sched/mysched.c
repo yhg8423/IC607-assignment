@@ -67,7 +67,7 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
     printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
 
     struct list_head *q;
-    list_for_each(q, mysched_rq->queue) {
+    list_for_each(q, &mysched_rq->queue) {
         //next_p = list_entry(p, struct task_struct, mysched.run_list);
         //next_se = container_of(q, struct sched_mysched_entity, run_list);
 	    //next_p = container_of(next_se, struct task_struct, mysched);
