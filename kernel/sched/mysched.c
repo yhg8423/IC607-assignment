@@ -77,17 +77,17 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
     }*/
     struct list_head *p;
     list_for_each(p, mysched_rq->queue) {
-        next_p = list_entry(p, struct task_struct, &p->mysched.run_list);
-        total_ticket += &next_p->mysched.ticket;
+        a = list_entry(p, struct task_struct, mysched.run_list);
+        total_ticket += a->mysched.ticket;
 
-        printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, &next_p->mysched.ticket);
+        printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", a->pid, a->mysched.ticket);
         printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
 
         if(total_ticket >= lucky_ticket) {
             break;
         }
     }
-    printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", next_p->pid);
+    printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", a->pid);
 	
 	//printk(KERN_INFO "\t***[MYSCHED] pick_next_task: cpu=%d,prev->pid=%d,next_p->pid=%d,nr_running=%d\n",cpu_of(rq),prev->pid,next_p->pid,mysched_rq->nr_running);
 	return next_p;
