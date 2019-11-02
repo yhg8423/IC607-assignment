@@ -127,6 +127,7 @@ const struct sched_class mysched_sched_class = {
 
     .set_curr_task = set_curr_task_mysched,
     .task_tick = task_tick_mysched,
+    .switched_to = switched_to_mysched,
 
 };
 
