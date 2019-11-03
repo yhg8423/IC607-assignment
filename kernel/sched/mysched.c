@@ -154,7 +154,7 @@ const struct sched_class mysched_sched_class = {
     .set_cpus_allowed = set_cpus_allowed_common,
 #endif
     .set_curr_task = set_curr_task_mysched,
-    .prio_change = prio_changed_mysched,
+    .prio_changed = prio_changed_mysched,
     .task_tick = task_tick_mysched,
     .switched_to = switched_to_mysched,
     .update_curr = update_curr_mysched
