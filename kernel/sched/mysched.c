@@ -19,7 +19,8 @@ static void update_curr_mysched(struct rq *rq)
 static void enqueue_task_mysched(struct rq *rq, struct task_struct *p, int flags)
 {
     list_add_tail(&rq->mysched.queue, &p->mysched.run_list);
-    rq->mysched.nr_running++;
+    //rq->mysched.nr_running++;
+    add_nr_running(rq, 1);
     p->mysched.ticket = 100;
     rq->mysched.max_ticket += p->mysched.ticket; 
     printk(KERN_INFO"***[MYSCHED] Enqueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
@@ -29,7 +30,8 @@ static void dequeue_task_mysched(struct rq *rq, struct task_struct *p, int flags
 {
 	if(!list_empty(&rq->mysched.queue)) {
 		list_del_init(&p->mysched.run_list);
-		rq->mysched.nr_running--;
+		//rq->mysched.nr_running--;
+        sub_nr_running(rq, 1);
 		printk(KERN_INFO"***[MYSCHED] Decueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 	}
 }
