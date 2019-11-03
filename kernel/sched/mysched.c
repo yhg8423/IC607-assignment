@@ -139,22 +139,25 @@ const struct sched_class mysched_sched_class = {
     //when task enters runnable state
     //nr_running++
     .enqueue_task = enqueue_task_mysched,
+
     //when task needs to go to wait state
     //nr_running--
     .dequeue_task = dequeue_task_mysched,
-    .yield_task = yield_task_mysched,
-
     //check if the task that entered runnable state should prevent current running task
     .check_preempt_curr = check_preempt_curr_mysched,
 
     //choose the next task to run from run queue
     .pick_next_task = pick_next_task_mysched,
     .put_prev_task = put_prev_task_mysched,
-
-    .set_curr_task = set_curr_task_mysched,
+#ifdef CONFIG_SMP
+    .select_task_rq = select_task_rq_mysched,
     .set_cpus_allowed = set_cpus_allowed_common,
+#endif
+    .set_curr_task = set_curr_task_mysched,
+    .prio_change = prio_changed_mysched,
     .task_tick = task_tick_mysched,
     .switched_to = switched_to_mysched,
+    .update_curr = update_curr_mysched
 
 };
 
