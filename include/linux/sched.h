@@ -564,7 +564,6 @@ struct sched_dl_entity {
 struct sched_mysched_entity {
 	struct list_head run_list;
 
-	unsigned int on_rq;
 	unsigned int ticket;
 };
 
@@ -607,10 +606,10 @@ struct task_struct {
 	randomized_struct_fields_start
 
 	void				*stack; // pointer of hte stack that the process is having
-	refcount_t			usage; // hw1
+	refcount_t			usage; 
 	/* Per task flags (PF_*), defined further below: */
-	unsigned int			flags; // hw1
-	unsigned int			ptrace; // hw1
+	unsigned int			flags; 
+	unsigned int			ptrace; 
 
 #ifdef CONFIG_SMP
 	struct llist_node		wake_entry;
@@ -633,20 +632,20 @@ struct task_struct {
 	int				recent_used_cpu;
 	int				wake_cpu;
 #endif
-	int				on_rq; // hw1
+	int				on_rq; 
 
-	int				prio; // hw1
-	int				static_prio; // hw1
-	int				normal_prio; // hw1
-	unsigned int			rt_priority; // hw1
+	int				prio; 
+	int				static_prio; 
+	int				normal_prio; 
+	unsigned int			rt_priority; 
 
-	const struct sched_class	*sched_class; // hw1
-	struct sched_entity		se; // hw1
-	struct sched_rt_entity		rt; // hw1
+	const struct sched_class	*sched_class; 
+	struct sched_entity		se; 
+	struct sched_rt_entity		rt; 
 #ifdef CONFIG_CGROUP_SCHED
 	struct task_group		*sched_task_group;
 #endif
-	struct sched_dl_entity		dl; // hw1
+	struct sched_dl_entity		dl; 
 
 	//declare mysched entity into task_struct
 	struct sched_mysched_entity mysched;
@@ -660,9 +659,9 @@ struct task_struct {
 	unsigned int			btrace_seq;
 #endif
 
-	unsigned int			policy; // hw1
-	int				nr_cpus_allowed; // hw1
-	cpumask_t			cpus_allowed; // hw1
+	unsigned int			policy; 
+	int				nr_cpus_allowed; 
+	cpumask_t			cpus_allowed; 
 
 #ifdef CONFIG_PREEMPT_RCU
 	int				rcu_read_lock_nesting;
@@ -679,51 +678,51 @@ struct task_struct {
 	struct list_head		rcu_tasks_holdout_list;
 #endif /* #ifdef CONFIG_TASKS_RCU */
 
-	struct sched_info		sched_info; // hw1
+	struct sched_info		sched_info; 
 
-	struct list_head		tasks; // hw1
+	struct list_head		tasks; 
 #ifdef CONFIG_SMP
 	struct plist_node		pushable_tasks;
 	struct rb_node			pushable_dl_tasks;
 #endif
 
-	struct mm_struct		*mm; // hw1
-	struct mm_struct		*active_mm; // hw1
+	struct mm_struct		*mm; 
+	struct mm_struct		*active_mm; 
 
 	/* Per-thread vma caching: */
-	struct vmacache			vmacache; // hw1
+	struct vmacache			vmacache; 
 
 #ifdef SPLIT_RSS_COUNTING
 	struct task_rss_stat		rss_stat;
 #endif
-	int				exit_state; // hw1
-	int				exit_code; // hw1
-	int				exit_signal; // hw1
+	int				exit_state; 
+	int				exit_code; 
+	int				exit_signal; 
 	/* The signal sent when the parent dies: */
-	int				pdeath_signal; // hw1
+	int				pdeath_signal; 
 	/* JOBCTL_*, siglock protected: */
-	unsigned long			jobctl; // hw1
+	unsigned long			jobctl; 
 
 	/* Used for emulating ABI behavior of previous Linux versions: */
-	unsigned int			personality; // hw1
+	unsigned int			personality; 
 
 	/* Scheduler bits, serialized by scheduler locks: */
-	unsigned			sched_reset_on_fork:1; // hw1
-	unsigned			sched_contributes_to_load:1; // hw1
-	unsigned			sched_migrated:1; // hw1
-	unsigned			sched_remote_wakeup:1; // hw1
+	unsigned			sched_reset_on_fork:1; 
+	unsigned			sched_contributes_to_load:1; 
+	unsigned			sched_migrated:1; 
+	unsigned			sched_remote_wakeup:1; 
 #ifdef CONFIG_PSI
 	unsigned			sched_psi_wake_requeue:1;
 #endif
 
 	/* Force alignment to the next boundary: */
-	unsigned			:0; // hw1
+	unsigned			:0; 
 
 	/* Unserialized, strictly 'current' */
 
 	/* Bit to tell LSMs we're in execve(): */
-	unsigned			in_execve:1; // hw1
-	unsigned			in_iowait:1; // hw1
+	unsigned			in_execve:1; 
+	unsigned			in_iowait:1; 
 #ifndef TIF_RESTORE_SIGMASK
 	unsigned			restore_sigmask:1;
 #endif
@@ -744,12 +743,12 @@ struct task_struct {
 	unsigned			use_memdelay:1;
 #endif
 
-	unsigned long			atomic_flags; /* Flags requiring atomic access. */ // hw1
+	unsigned long			atomic_flags; /* Flags requiring atomic access. */ 
 
-	struct restart_block		restart_block; // hw1
+	struct restart_block		restart_block; 
 
-	pid_t				pid; // hw1
-	pid_t				tgid; // hw1
+	pid_t				pid; 
+	pid_t				tgid; 
 
 #ifdef CONFIG_STACKPROTECTOR
 	/* Canary value for the -fstack-protector GCC feature: */
@@ -762,17 +761,17 @@ struct task_struct {
 	 */
 
 	/* Real parent process: */
-	struct task_struct __rcu	*real_parent; // hw1
+	struct task_struct __rcu	*real_parent; 
 
 	/* Recipient of SIGCHLD, wait4() reports: */
-	struct task_struct __rcu	*parent; // hw1
+	struct task_struct __rcu	*parent; 
 
 	/*
 	 * Children/sibling form the list of natural children:
 	 */
-	struct list_head		children; // hw1
-	struct list_head		sibling; // hw1
-	struct task_struct		*group_leader; // hw1
+	struct list_head		children; 
+	struct list_head		sibling; 
+	struct task_struct		*group_leader; 
 
 	/*
 	 * 'ptraced' is the list of tasks this task is using ptrace() on.
@@ -780,31 +779,31 @@ struct task_struct {
 	 * This includes both natural children and PTRACE_ATTACH targets.
 	 * 'ptrace_entry' is this task's link on the p->parent->ptraced list.
 	 */
-	struct list_head		ptraced; // hw1
-	struct list_head		ptrace_entry; // hw1
+	struct list_head		ptraced; 
+	struct list_head		ptrace_entry; 
 
 	/* PID/PID hash table linkage. */
-	struct pid			*thread_pid; // hw1
-	struct hlist_node		pid_links[PIDTYPE_MAX]; // hw1
-	struct list_head		thread_group; // hw1
-	struct list_head		thread_node; // hw1
+	struct pid			*thread_pid; 
+	struct hlist_node		pid_links[PIDTYPE_MAX]; 
+	struct list_head		thread_group; 
+	struct list_head		thread_node; 
 
-	struct completion		*vfork_done; // hw1
+	struct completion		*vfork_done; 
 
 	/* CLONE_CHILD_SETTID: */
-	int __user			*set_child_tid; // hw1
+	int __user			*set_child_tid; 
 
 	/* CLONE_CHILD_CLEARTID: */
-	int __user			*clear_child_tid; // hw1
+	int __user			*clear_child_tid; 
 
-	u64				utime; // hw1
-	u64				stime; // hw1
+	u64				utime; 
+	u64				stime; 
 #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
 	u64				utimescaled;
 	u64				stimescaled;
 #endif
-	u64				gtime; // hw1
-	struct prev_cputime		prev_cputime; // hw1
+	u64				gtime; 
+	struct prev_cputime		prev_cputime; 
 #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
 	struct vtime			vtime;
 #endif
@@ -813,18 +812,18 @@ struct task_struct {
 	atomic_t			tick_dep_mask;
 #endif
 	/* Context switch counts: */
-	unsigned long			nvcsw; // hw1
-	unsigned long			nivcsw; // hw1
+	unsigned long			nvcsw; 
+	unsigned long			nivcsw; 
 
 	/* Monotonic time in nsecs: */
-	u64				start_time; // hw1
+	u64				start_time; 
 
 	/* Boot based time in nsecs: */
-	u64				real_start_time; // hw1
+	u64				real_start_time; 
 
 	/* MM fault and swap info: this can arguably be seen as either mm-specific or thread-specific: */
-	unsigned long			min_flt; // hw1
-	unsigned long			maj_flt; // hw1
+	unsigned long			min_flt; 
+	unsigned long			maj_flt; 
 
 #ifdef CONFIG_POSIX_TIMERS
 	struct task_cputime		cputime_expires;
@@ -834,13 +833,13 @@ struct task_struct {
 	/* Process credentials: */
 
 	/* Tracer's credentials at attach: */
-	const struct cred __rcu		*ptracer_cred; // hw1
+	const struct cred __rcu		*ptracer_cred; 
 
 	/* Objective and real subjective task credentials (COW): */
-	const struct cred __rcu		*real_cred; // hw1
+	const struct cred __rcu		*real_cred; 
 
 	/* Effective (overridable) subjective task credentials (COW): */
-	const struct cred __rcu		*cred; // hw1
+	const struct cred __rcu		*cred; 
 
 	/*
 	 * executable name, excluding path.
@@ -849,9 +848,9 @@ struct task_struct {
 	 * - access it with [gs]et_task_comm()
 	 * - lock it with task_lock()
 	 */
-	char				comm[TASK_COMM_LEN]; // hw1
+	char				comm[TASK_COMM_LEN]; 
 
-	struct nameidata		*nameidata; // hw1
+	struct nameidata		*nameidata; 
 
 #ifdef CONFIG_SYSVIPC
 	struct sysv_sem			sysvsem;
@@ -862,27 +861,27 @@ struct task_struct {
 	unsigned long			last_switch_time;
 #endif
 	/* Filesystem information: */
-	struct fs_struct		*fs; // hw1
+	struct fs_struct		*fs; 
 
 	/* Open file information: */
-	struct files_struct		*files; // hw1
+	struct files_struct		*files; 
 
 	/* Namespaces: */
-	struct nsproxy			*nsproxy; // hw1
+	struct nsproxy			*nsproxy; 
 
 	/* Signal handlers: */
-	struct signal_struct		*signal; // hw1
-	struct sighand_struct		*sighand; // hw1
-	sigset_t			blocked; // hw1
-	sigset_t			real_blocked; // hw1
+	struct signal_struct		*signal; 
+	struct sighand_struct		*sighand; 
+	sigset_t			blocked; 
+	sigset_t			real_blocked; 
 	/* Restored if set_restore_sigmask() was used: */
-	sigset_t			saved_sigmask; // hw1
-	struct sigpending		pending; // hw1
-	unsigned long			sas_ss_sp; // hw1
-	size_t				sas_ss_size; // hw1
-	unsigned int			sas_ss_flags; // hw1
+	sigset_t			saved_sigmask; 
+	struct sigpending		pending; 
+	unsigned long			sas_ss_sp; 
+	size_t				sas_ss_size; 
+	unsigned int			sas_ss_flags; 
 
-	struct callback_head		*task_works; // hw1
+	struct callback_head		*task_works; 
 
 #ifdef CONFIG_AUDIT
 #ifdef CONFIG_AUDITSYSCALL
@@ -891,19 +890,19 @@ struct task_struct {
 	kuid_t				loginuid;
 	unsigned int			sessionid;
 #endif
-	struct seccomp			seccomp; // hw1
+	struct seccomp			seccomp; 
 
 	/* Thread group tracking: */
-	u32				parent_exec_id; // hw1
-	u32				self_exec_id; // hw1
+	u32				parent_exec_id; 
+	u32				self_exec_id; 
 
 	/* Protection against (de-)allocation: mm, files, fs, tty, keyrings, mems_allowed, mempolicy: */
-	spinlock_t			alloc_lock; // hw1
+	spinlock_t			alloc_lock; 
 
 	/* Protection of the PI data structures: */
-	raw_spinlock_t			pi_lock; // hw1
+	raw_spinlock_t			pi_lock; 
 
-	struct wake_q_node		wake_q; // hw1
+	struct wake_q_node		wake_q; 
 
 #ifdef CONFIG_RT_MUTEXES
 	/* PI waiters blocked on a rt_mutex held by this task: */
@@ -948,10 +947,10 @@ struct task_struct {
 #endif
 
 	/* Journalling filesystem info: */
-	void				*journal_info; // hw1
+	void				*journal_info; 
 
 	/* Stacked block device info: */
-	struct bio_list			*bio_list; // hw1
+	struct bio_list			*bio_list; 
 
 #ifdef CONFIG_BLOCK
 	/* Stack plugging: */
@@ -959,20 +958,20 @@ struct task_struct {
 #endif
 
 	/* VM state: */
-	struct reclaim_state		*reclaim_state; // hw1
+	struct reclaim_state		*reclaim_state; 
 
-	struct backing_dev_info		*backing_dev_info; // hw1
+	struct backing_dev_info		*backing_dev_info; 
 
-	struct io_context		*io_context; // hw1
+	struct io_context		*io_context; 
 
 #ifdef CONFIG_COMPACTION
 	struct capture_control		*capture_control;
 #endif
 	/* Ptrace state: */
-	unsigned long			ptrace_message; // hw1
-	kernel_siginfo_t		*last_siginfo; // hw1
+	unsigned long			ptrace_message; 
+	kernel_siginfo_t		*last_siginfo; 
 
-	struct task_io_accounting	ioac; // hw1
+	struct task_io_accounting	ioac; 
 #ifdef CONFIG_PSI
 	/* Pressure stall state */
 	unsigned int			psi_flags;
@@ -1085,14 +1084,14 @@ struct task_struct {
 	unsigned long rseq_event_mask;
 #endif
 
-	struct tlbflush_unmap_batch	tlb_ubc; // hw1
+	struct tlbflush_unmap_batch	tlb_ubc; 
 
-	struct rcu_head			rcu; // hw1
+	struct rcu_head			rcu; 
 
 	/* Cache last used pipe for splice(): */
-	struct pipe_inode_info		*splice_pipe; // hw1
+	struct pipe_inode_info		*splice_pipe; 
 
-	struct page_frag		task_frag; // hw1
+	struct page_frag		task_frag; 
 
 #ifdef CONFIG_TASK_DELAY_ACCT
 	struct task_delay_info		*delays;
@@ -1106,10 +1105,10 @@ struct task_struct {
 	 * When (nr_dirtied >= nr_dirtied_pause), it's time to call
 	 * balance_dirty_pages() for a dirty throttling pause:
 	 */
-	int				nr_dirtied; // hw1
-	int				nr_dirtied_pause; // hw1
+	int				nr_dirtied; 
+	int				nr_dirtied_pause; 
 	/* Start of a write-and-pause period: */
-	unsigned long			dirty_paused_when; // hw1
+	unsigned long			dirty_paused_when; 
 
 #ifdef CONFIG_LATENCYTOP
 	int				latency_record_count;
@@ -1119,8 +1118,8 @@ struct task_struct {
 	 * Time slack values; these are used to round up poll() and
 	 * select() etc timeout values. These are in nanoseconds.
 	 */
-	u64				timer_slack_ns; // hw1
-	u64				default_timer_slack_ns; // hw1
+	u64				timer_slack_ns; 
+	u64				default_timer_slack_ns; 
 
 #ifdef CONFIG_KASAN
 	unsigned int			kasan_depth;
@@ -1223,10 +1222,10 @@ struct task_struct {
 	 * New fields for task_struct should be added above here, so that
 	 * they are included in the randomized portion of task_struct.
 	 */
-	randomized_struct_fields_end // hw1
+	randomized_struct_fields_end 
 
 	/* CPU-specific state of this task: */
-	struct thread_struct		thread; // hw1
+	struct thread_struct		thread; 
 
 	/*
 	 * WARNING: on x86, 'thread_struct' contains a variable-sized

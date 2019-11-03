@@ -21,8 +21,7 @@ static void enqueue_task_mysched(struct rq *rq, struct task_struct *p, int flags
     INIT_LIST_HEAD(&p->mysched.run_list);
     list_add_tail(&p->mysched.run_list, &rq->mysched.queue);
     rq->mysched.nr_running++;
-    //add_nr_running(rq, 1);
-    p->mysched.ticket = 100;
+    p->mysched.ticket = 500 - priority * 500 / 140;
     rq->mysched.max_ticket += p->mysched.ticket; 
     printk(KERN_INFO"***[MYSCHED] Enqueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 }
@@ -32,7 +31,7 @@ static void dequeue_task_mysched(struct rq *rq, struct task_struct *p, int flags
 	if(!list_empty(&rq->mysched.queue)) {
 		list_del_init(&p->mysched.run_list);
 		rq->mysched.nr_running--;
-        //sub_nr_running(rq, 1);
+        rq->mysched.max_ticket -= p->mysched.ticket; 
 		printk(KERN_INFO"***[MYSCHED] Decueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 	}
 }
@@ -55,57 +54,38 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 	struct mysched_rq *mysched_rq = &rq->mysched;
 
 	if(!mysched_rq->nr_running) {
-        printk(KERN_INFO "***[MYSCHED] nr_running is zero!");
 		return NULL;
     }
 
     printk(KERN_INFO "***[MYSCHED] pick next task cpu=%d\n", cpu_of(rq));
 
-    int total_ticket = 0;
-    //int lucky_ticket = (rand() % rq->mysched.max_ticket) + 1;
-    int lucky_ticket = 101;
+    int total_ticket = rq->mysched.max_ticket;
+    int lucky_ticket = 0;
+    int ticket_sum = 0;
 
-    printk(KERN_INFO "***[MYSCHED] total = [%d]\n", rq->mysched.max_ticket);
+    while(lucky_ticket <= 0) {
+        get_random_bytes(&lucky_ticket, sizeof(unsigned long));
+		lucky_tickets = (lucky_ticket % total_ticket) + 1;
+    }
+
+    printk(KERN_INFO "***[MYSCHED] total = [%d]\n", total_ticket);
     printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
 
     struct list_head *q;
     list_for_each(q, &mysched_rq->queue) {
-        printk(KERN_INFO "***[MYSCHED] test input \n");
-        //next_p = list_entry(p, struct task_struct, mysched.run_list);
-        //next_se = container_of(q, struct sched_mysched_entity, run_list);
-	    //next_p = container_of(next_se, struct task_struct, mysched);
-        //next_p  = container_of(q, struct task_struct, mysched.run_list);
         next_p = list_entry(q, struct task_struct, mysched.run_list);
-        total_ticket += next_p->mysched.ticket;
+        ticket_sum += next_p->mysched.ticket;
 
         printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, next_p->mysched.ticket);
-        printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
+        printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", ticket_sum);
 
-        if(total_ticket >= lucky_ticket) {
+        if(ticket_sum >= lucky_ticket) {
             break;
         }
     }
-    
-
-    /*
-    while(total_ticket < lucky_ticket) {
-        next_se = container_of(mysched_rq->queue.next, struct sched_mysched_entity, run_list);
-	    next_p = container_of(next_se, struct task_struct, mysched);
-
-        total_ticket += next_p->mysched.ticket;
-        printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, next_p->mysched.ticket);
-        printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
-
-        if(!mysched_rq->nr_running) {
-            printk(KERN_INFO "***[MYSCHED] nr_running is zero!");
-            return NULL;
-        }
-    }
-    */
 
     printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", next_p->pid);
 	
-	//printk(KERN_INFO "\t***[MYSCHED] pick_next_task: cpu=%d,prev->pid=%d,next_p->pid=%d,nr_running=%d\n",cpu_of(rq),prev->pid,next_p->pid,mysched_rq->nr_running);
 	return next_p;
 }
 
@@ -121,8 +101,7 @@ static void task_tick_mysched(struct rq *rq, struct task_struct *p, int queued)
 {
     //need to insert
     struct sched_mysched_entity *me = &p->mysched;
-    //printk(KERN_INFO "***[OS18] Tick:::P[%u](mysched = %u): pass = %llu \n", p->pid, me->stride, me->pass);
-    printk(KERN_INFO "***[OS18] Tick:::P[%u](mysched_ticket = %u) \n", p->pid, me->ticket);
+    printk(KERN_INFO "***[MYSCHED] Tick:::P[%u](mysched_ticket = %u) \n", p->pid, me->ticket);
 }
 
 static void prio_changed_mysched(struct rq *rq, struct task_struct *p, int oldprio)
@@ -131,8 +110,9 @@ static void prio_changed_mysched(struct rq *rq, struct task_struct *p, int oldpr
 
 static void switched_to_mysched(struct rq *rq, struct task_struct *p)
 {
-    if (p->sched_class == &mysched_sched_class)
-		return;
+    if (p->sched_class == &mysched_sched_class) {
+        return;
+    }
 	enqueue_task_mysched(rq, p, 0);
 }
 
