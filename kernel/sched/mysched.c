@@ -60,12 +60,12 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 
     printk(KERN_INFO "***[MYSCHED] pick next task cpu=%d\n", cpu_of(rq));
 
-    int total_ticket = rq->mysched.max_ticket;
-    int lucky_ticket = 0;
+    unsigned int total_ticket = rq->mysched.max_ticket;
+    unsigned int lucky_ticket = 0;
     int ticket_sum = 0;
 
     while(lucky_ticket <= 0) {
-        get_random_bytes(&lucky_ticket, sizeof(unsigned long));
+        get_random_bytes(&lucky_ticket, sizeof(unsigned int));
 		lucky_ticket = (lucky_ticket % total_ticket) + 1;
     }
 
