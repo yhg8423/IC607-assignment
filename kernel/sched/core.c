@@ -2160,6 +2160,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 
 	INIT_LIST_HEAD(&p->mysched.run_list);
 	p->mysched.ticket = 0;
+	p->mysched.on_rq = 0;
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	INIT_HLIST_HEAD(&p->preempt_notifiers);
