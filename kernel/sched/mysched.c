@@ -67,7 +67,7 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 
     printk(KERN_INFO "***[MYSCHED] total = [%d]\n", rq->mysched.max_ticket);
     printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
-
+ㅊ
     /*
     struct list_head *q;
     list_for_each(q, &mysched_rq->queue) {
@@ -96,6 +96,11 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
         total_ticket += next_p->mysched.ticket;
         printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, next_p->mysched.ticket);
         printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
+
+        if(!mysched_rq->nr_running) {
+            printk(KERN_INFO "***[MYSCHED] nr_running is zero!");
+            return NULL;
+        }
     }
 
     printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", next_p->pid);
@@ -126,7 +131,9 @@ static void prio_changed_mysched(struct rq *rq, struct task_struct *p, int oldpr
 
 static void switched_to_mysched(struct rq *rq, struct task_struct *p)
 {
-    resched_curr(rq);
+    if (p->sched_class == &mysched_sched_class)
+		return;
+	enqueue_task_mysched(rq, p, 0);
 }
 
 const struct sched_class mysched_sched_class = {
