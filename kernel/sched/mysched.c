@@ -21,7 +21,7 @@ static void enqueue_task_mysched(struct rq *rq, struct task_struct *p, int flags
     INIT_LIST_HEAD(&p->mysched.run_list);
     list_add_tail(&p->mysched.run_list, &rq->mysched.queue);
     rq->mysched.nr_running++;
-    p->mysched.ticket = 500 - priority * 500 / 140;
+    p->mysched.ticket = 500 - p->prio * 500 / 140;
     rq->mysched.max_ticket += p->mysched.ticket; 
     printk(KERN_INFO"***[MYSCHED] Enqueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 }
