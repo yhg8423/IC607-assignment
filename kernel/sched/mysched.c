@@ -53,13 +53,16 @@ static void put_prev_task_mysched(struct rq *rq, struct task_struct *prev)
 static struct task_struct * 
 pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 {
-    printk(KERN_INFO "***[MYSCHED] pick next task cpu=%d\n", cpu_of(rq));
     struct task_struct *next_p = NULL;
 	struct sched_mysched_entity *next_se = NULL;
 	struct mysched_rq *mysched_rq = &rq->mysched;
 
-	if(!mysched_rq->nr_running)
+	if(!mysched_rq->nr_running) {
+        printk(KERN_INFO "***[MYSCHED] nr_running is zero!");
 		return NULL;
+    }
+
+    printk(KERN_INFO "***[MYSCHED] pick next task cpu=%d\n", cpu_of(rq));
 
     int total_ticket = 0;
     //int lucky_ticket = (rand() % rq->mysched.max_ticket) + 1;
