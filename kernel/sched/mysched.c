@@ -50,7 +50,6 @@ static struct task_struct *
 pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 {
     struct task_struct *next_p = NULL;
-	struct sched_mysched_entity *next_se = NULL;
 	struct mysched_rq *mysched_rq = &rq->mysched;
 
 	if(!mysched_rq->nr_running) {
@@ -65,7 +64,7 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 
     while(lucky_ticket <= 0) {
         get_random_bytes(&lucky_ticket, sizeof(unsigned long));
-		lucky_tickets = (lucky_ticket % total_ticket) + 1;
+		lucky_ticket = (lucky_ticket % total_ticket) + 1;
     }
 
     printk(KERN_INFO "***[MYSCHED] total = [%d]\n", total_ticket);
