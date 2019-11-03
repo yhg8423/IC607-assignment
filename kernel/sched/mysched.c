@@ -68,6 +68,7 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
     printk(KERN_INFO "***[MYSCHED] total = [%d]\n", rq->mysched.max_ticket);
     printk(KERN_INFO "***[MYSCHED] winner = [%d]\n", lucky_ticket);
 
+    /*
     struct list_head *q;
     list_for_each(q, &mysched_rq->queue) {
         printk(KERN_INFO "***[MYSCHED] test input \n");
@@ -85,8 +86,9 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
             break;
         }
     }
+    */
 
-    /*
+    
     while(total_ticket < lucky_ticket) {
         next_se = container_of(mysched_rq->queue.next, struct sched_mysched_entity, run_list);
 	    next_p = container_of(next_se, struct task_struct, mysched);
@@ -94,10 +96,7 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
         total_ticket += next_p->mysched.ticket;
         printk(KERN_INFO "***[MYSCHED] pid = [%d] ticket = [%d]\n", next_p->pid, next_p->mysched.ticket);
         printk(KERN_INFO "***[MYSCHED] sum = [%d] \n", total_ticket);
-
-
     }
-    */
 
     printk(KERN_INFO "***[MYSCHED] [sum >= winner] Next task pid = [%d] \n", next_p->pid);
 	
