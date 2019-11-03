@@ -18,6 +18,7 @@ static void update_curr_mysched(struct rq *rq)
 
 static void enqueue_task_mysched(struct rq *rq, struct task_struct *p, int flags)
 {
+    INIT_LIST_HEAD(&p->mysched.run_list);
     list_add_tail(&rq->mysched.queue, &p->mysched.run_list);
     //rq->mysched.nr_running++;
     add_nr_running(rq, 1);
@@ -34,10 +35,6 @@ static void dequeue_task_mysched(struct rq *rq, struct task_struct *p, int flags
         sub_nr_running(rq, 1);
 		printk(KERN_INFO"***[MYSCHED] Decueue: nr_running = %d pid = %d\n", rq->mysched.nr_running, p->pid);
 	}
-}
-
-static void yield_task_mysched(struct rq *rq)
-{
 }
 
 static void check_preempt_curr_mysched(struct rq *rq, struct task_struct *p, int flags)
