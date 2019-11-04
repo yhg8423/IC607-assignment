@@ -2158,9 +2158,9 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 	p->rt.on_rq		= 0;
 	p->rt.on_list		= 0;
 
-	INIT_LIST_HEAD(&p->mysched.run_list);
-	p->mysched.ticket = 0;
-	p->mysched.on_rq = 0;
+	INIT_LIST_HEAD(&p->mysched.run_list); // initialize run_list in mysched entity
+	p->mysched.ticket = 0; // initialize ticket in mysched entity with zero
+	p->mysched.on_rq = 0; // initialize on_rq in mysched entity with zero
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	INIT_HLIST_HEAD(&p->preempt_notifiers);
@@ -4090,7 +4090,7 @@ static void __setscheduler(struct rq *rq, struct task_struct *p,
 	else if (rt_prio(p->prio))
 		p->sched_class = &rt_sched_class;
 	else if (mysched_policy(attr->sched_policy))
-		p->sched_class = &mysched_sched_class;
+		p->sched_class = &mysched_sched_class; // assign mysched_sched_class
 	else
 		p->sched_class = &fair_sched_class;
 }
@@ -5980,7 +5980,7 @@ void __init sched_init(void)
 		init_cfs_rq(&rq->cfs);
 		init_rt_rq(&rq->rt);
 		init_dl_rq(&rq->dl);
-		init_mysched_rq(&rq->mysched);
+		init_mysched_rq(&rq->mysched); // initialize mysched scheduler per core
 #ifdef CONFIG_FAIR_GROUP_SCHED
 		root_task_group.shares = ROOT_TASK_GROUP_LOAD;
 		INIT_LIST_HEAD(&rq->leaf_cfs_rq_list);
