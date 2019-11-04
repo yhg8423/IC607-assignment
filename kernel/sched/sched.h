@@ -173,6 +173,7 @@ static inline int dl_policy(int policy)
 	return policy == SCHED_DEADLINE;
 }
 
+// function which return mysched policy number
 static inline int mysched_policy(int policy)
 {
 	return policy == SCHED_MYSCHED;
@@ -181,7 +182,7 @@ static inline int mysched_policy(int policy)
 static inline bool valid_policy(int policy)
 {
 	return idle_policy(policy) || fair_policy(policy) || 
-		mysched_policy(policy) ||
+		mysched_policy(policy) || // Addd mysched_policy() to validate policy number
 		rt_policy(policy) || dl_policy(policy);
 }
 
@@ -692,13 +693,14 @@ struct dl_rq {
 	u64			bw_ratio;
 };
 
+// declare & define mysched_rq
 struct mysched_rq {
-	unsigned int nr_running;
-	unsigned int max_ticket;
+	unsigned int nr_running; // declare unsigned integer variable nr_running which indicates tasks in run queue
+	unsigned int max_ticket; // declare unsigned integer variable max_ticket which store all of tickets of tasks in run queue
 
-	struct list_head queue;
+	struct list_head queue; // declare list_head struct which indicates queue
 
-	unsigned int prev_pick_time;
+	unsigned int prev_pick_time; // declare unsigned integer variable prev_pick_time to store previous pick time
 };
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
@@ -855,7 +857,7 @@ struct rq {
 	struct cfs_rq		cfs;
 	struct rt_rq		rt;
 	struct dl_rq		dl;
-	struct mysched_rq	mysched;
+	struct mysched_rq	mysched; // declare run queue of mysched
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
 	/* list of leaf cfs_rq on this CPU: */
@@ -1751,7 +1753,7 @@ extern const struct sched_class dl_sched_class;
 extern const struct sched_class rt_sched_class;
 extern const struct sched_class fair_sched_class;
 extern const struct sched_class idle_sched_class;
-extern const struct sched_class mysched_sched_class;
+extern const struct sched_class mysched_sched_class; // declare mysched's scheduler class
 
 
 #ifdef CONFIG_SMP
@@ -2126,7 +2128,7 @@ print_numa_stats(struct seq_file *m, int node, unsigned long tsf,
 extern void init_cfs_rq(struct cfs_rq *cfs_rq);
 extern void init_rt_rq(struct rt_rq *rt_rq);
 extern void init_dl_rq(struct dl_rq *dl_rq);
-extern void init_mysched_rq(struct mysched_rq *mysched_rq);
+extern void init_mysched_rq(struct mysched_rq *mysched_rq); // declare mysched's rq init function
 
 extern void cfs_bandwidth_usage_inc(void);
 extern void cfs_bandwidth_usage_dec(void);
