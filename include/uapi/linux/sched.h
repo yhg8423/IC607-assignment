@@ -42,6 +42,7 @@
 #define SCHED_IDLE		5
 #define SCHED_DEADLINE		6
 
+// define mysched policy number
 #define SCHED_MYSCHED	7
 
 /* Can be ORed in to make sure the process is reverted back to SCHED_NORMAL on fork */
