@@ -562,10 +562,10 @@ struct sched_dl_entity {
 
 //define mysched entity structure
 struct sched_mysched_entity {
-	struct list_head run_list;
+	struct list_head run_list; // declare run_list for mysched
 
-	unsigned int ticket;
-	unsigned int on_rq;
+	unsigned int ticket; // declare unsigned integer variable to store ticket for lottery scheduling algorithm
+	unsigned int on_rq; // declare unsigned integer variable to indicate that task is in run queue
 };
 
 union rcu_special {
@@ -648,8 +648,7 @@ struct task_struct {
 #endif
 	struct sched_dl_entity		dl; 
 
-	//declare mysched entity into task_struct
-	struct sched_mysched_entity mysched;
+	struct sched_mysched_entity mysched; //declare mysched entity into task_struct
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	/* List of struct preempt_notifier: */
