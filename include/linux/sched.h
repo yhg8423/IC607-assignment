@@ -560,7 +560,7 @@ struct sched_dl_entity {
 	struct hrtimer inactive_timer;
 };
 
-//define mysched entity structure
+// define mysched entity structure
 struct sched_mysched_entity {
 	struct list_head run_list; // declare run_list for mysched
 
@@ -648,7 +648,7 @@ struct task_struct {
 #endif
 	struct sched_dl_entity		dl; 
 
-	struct sched_mysched_entity mysched; //declare mysched entity into task_struct
+	struct sched_mysched_entity mysched; // declare mysched entity into task_struct
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	/* List of struct preempt_notifier: */
