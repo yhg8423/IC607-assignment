@@ -65,13 +65,13 @@ pick_next_task_mysched(struct rq *rq, struct task_struct *prev, struct rq_flags 
 
     printk(KERN_INFO "***[MYSCHED] pick next task cpu(%d)\n", cpu_of(rq)); // print number of cpu for scheduling
 
-    unsigned int total_ticket = rq->mysched.max_ticket; // unsigned integer variable to store sum of tickets of tasks in run queue
-    unsigned int lucky_ticket = 0; // declare unsigned integer variable which will store the lucky ticket(winner) in the algorithm
-    int ticket_sum = 0; // declare integer variable which will store the sum of tickets of tasks which are selected during loop
+    unsigned long total_ticket = rq->mysched.max_ticket; // unsigned integer variable to store sum of tickets of tasks in run queue
+    unsigned long lucky_ticket = 0; // declare unsigned integer variable which will store the lucky ticket(winner) in the algorithm
+    unsigned long ticket_sum = 0; // declare integer variable which will store the sum of tickets of tasks which are selected during loop
 
     // selecting lucky ticket(winner) randomly
     while(lucky_ticket <= 0) {
-        get_random_bytes(&lucky_ticket, sizeof(unsigned int));
+        get_random_bytes(&lucky_ticket, sizeof(unsigned long));
 		lucky_ticket = (lucky_ticket % total_ticket) + 1;
     }
 
