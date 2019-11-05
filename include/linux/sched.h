@@ -564,7 +564,7 @@ struct sched_dl_entity {
 struct sched_mysched_entity {
 	struct list_head run_list; // declare run_list for mysched
 
-	unsigned int ticket; // declare unsigned integer variable to store ticket for lottery scheduling algorithm
+	unsigned long ticket; // declare unsigned long variable to store ticket for lottery scheduling algorithm
 	unsigned int on_rq; // declare unsigned integer variable to indicate that task is in run queue
 };
 

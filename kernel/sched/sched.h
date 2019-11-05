@@ -696,7 +696,7 @@ struct dl_rq {
 // declare & define mysched_rq
 struct mysched_rq {
 	unsigned int nr_running; // declare unsigned integer variable nr_running which indicates tasks in run queue
-	unsigned int max_ticket; // declare unsigned integer variable max_ticket which store all of tickets of tasks in run queue
+	unsigned long max_ticket; // declare unsigned long variable max_ticket which store all of tickets of tasks in run queue
 
 	struct list_head queue; // declare list_head struct which indicates queue
 
