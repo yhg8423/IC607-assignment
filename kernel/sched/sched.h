@@ -339,7 +339,7 @@ extern bool dl_cpu_busy(unsigned int cpu);
 
 struct cfs_rq;
 struct rt_rq;
-struct mysched_rq;
+struct mysched_rq; // declare run queue structure of mysched
 
 extern struct list_head task_groups;
 
@@ -693,7 +693,7 @@ struct dl_rq {
 	u64			bw_ratio;
 };
 
-// declare & define mysched_rq
+// define mysched_rq
 struct mysched_rq {
 	unsigned int nr_running; // declare unsigned integer variable nr_running which indicates tasks in run queue
 	unsigned long max_ticket; // declare unsigned long variable max_ticket which store all of tickets of tasks in run queue
